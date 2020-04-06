@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='pielogstash',
+    name='logstashpy',
     version='0.1',
     author="Pranav Gupta",
     author_email="pranavgupta4321@gmail.com",
@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/pranavgupta1234/pielogstash",
     license="Apache Software License",
-    packages=["pielogstash"],
+    packages=["logstashpy"],
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
