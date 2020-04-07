@@ -9,7 +9,7 @@ host = 'localhost'
 
 test_logger = logging.getLogger('python-logstash-logger')
 test_logger.setLevel(logging.INFO)
-test_logger.addHandler(TCPLogstashHandler(host, 5959))
+test_logger.addHandler(TCPLogstashHandler(host, 5959, serializer='msgpack'))
 
 test_logger.error('python-logstash: test logstash error message.')
 test_logger.info('python-logstash: test logstash info message.')

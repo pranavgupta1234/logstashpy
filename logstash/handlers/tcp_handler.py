@@ -4,22 +4,28 @@ from logstash.serialization import Serializer
 from logstash.formatters.base_formatter import DefaultLogstashFormatter
 
 import logging
-import socket
+import ssl
 
 logger = logging.getLogger(__name__)
 
 
 class TCPLogstashHandler(SocketHandler):
     '''
-    host :          Logstash host instance
-    port :          Default port for logstash
-    formatter :     By default when a handler is created no formatter is attached, similarly if no
-                    handler is specified python default formatter will be used. To use bundled formatter
-                    specify explicitly
-    serialization : serialization format to be used, default is pickle
+    :param fqdn; Indicates whether to show fully qualified domain name or not (default False).
+    :param version: version of logstash event schema (default is 0).	    :param version: version of logstash event schema (default is 0).
+    :param tags: list of tags for a logger (default is None).	    :param tags: list of tags for a logger (default is None).
+    :param ssl: Should SSL be enabled for the connection? Default is True.
+    :param ssl_verify: Should the server's SSL certificate be verified?
+    :param keyfile: The path to client side SSL key file (default is None).
+    :param certfile: The path to client side SSL certificate file (default is None).
+    :param ca_certs: The path to the file containing recognised CA certificates. System wide CA certs are used if omitted.
+    """	    """
+
     '''
 
-    def __init__(self, host, port=5959, logstash_formatter=DefaultLogstashFormatter, serializer='pickle', message_type='logstash', tags=None):
+    def __init__(self, host, port=5959, logstash_formatter=DefaultLogstashFormatter,
+                 serializer='pickle', message_type='logstash', tags=None, fqdn=False, ssl = True,
+                 ssl_verify=False, keyfile=None, certfile=None, ca_certs=None):
         super(TCPLogstashHandler, self).__init__(host, port)
         self._host = host
         self._port = port
@@ -27,9 +33,36 @@ class TCPLogstashHandler(SocketHandler):
         self._message_type = message_type
         self._logstash_formatter = logstash_formatter()
         self.tags = tags
+        self._fqdn = fqdn
+
+        self._ssl = ssl
+        self._ssl_verify = ssl_verify
+        self._keyfile = keyfile
+        self._certfile = certfile
+        self._ca_certs = ca_certs
 
 
 
     def makePickle(self, record: LogRecord) -> bytes:
         return Serializer.serialize(self._logstash_formatter.format(record), self._data_serialization)
 
+    def makeSocket(self, timeout=1):
+        s = super(TCPLogstashHandler, self).makeSocket()
+
+        if not self._ssl:
+            return s
+
+        context = ssl.create_default_context(cafile=self._ca_certs)
+        context.verify_mode = ssl.CERT_REQUIRED
+        if not self._ssl_verify:
+            if self._ca_certs:
+                context.verify_mode = ssl.CERT_OPTIONAL
+            else:
+                context.check_hostname = False
+                context.verify_mode = ssl.CERT_NONE
+
+        # Client side certificate auth.
+        if self._certfile and self._keyfile:
+            context.load_cert_chain(self._certfile, keyfile=self._keyfile)
+
+        return context.wrap_socket(s, server_hostname=self._host)
