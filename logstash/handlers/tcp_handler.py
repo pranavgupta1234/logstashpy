@@ -1,7 +1,9 @@
-from logging import LogRecord
+from logging import LogRecord, Formatter
 from logging.handlers import SocketHandler
 from logstash.serialization import Serializer
 from logstash.formatters.base_formatter import DefaultLogstashFormatter
+from logstash.formatters.ecs_formatter import ECSStdlibFormatter
+from ecs_logging import StdlibFormatter
 
 import logging
 import ssl
@@ -19,32 +21,26 @@ class TCPLogstashHandler(SocketHandler):
     :param keyfile: The path to client side SSL key file (default is None).
     :param certfile: The path to client side SSL certificate file (default is None).
     :param ca_certs: The path to the file containing recognised CA certificates. System wide CA certs are used if omitted.
-    """	    """
-
     '''
 
-    def __init__(self, host, port=5959, logstash_formatter=DefaultLogstashFormatter,
-                 serializer='pickle', message_type='logstash', tags=None, fqdn=False, ssl = True,
-                 ssl_verify=False, keyfile=None, certfile=None, ca_certs=None):
+    def __init__(self, host, port=5959, serializer='pickle', message_type='logstash', tags=None,
+                 fqdn=False, ssl = False, ssl_verify=False, keyfile=None, certfile=None, ca_certs=None):
         super(TCPLogstashHandler, self).__init__(host, port)
         self._host = host
         self._port = port
         self._data_serialization = serializer
         self._message_type = message_type
-        self._logstash_formatter = logstash_formatter()
         self.tags = tags
         self._fqdn = fqdn
-
         self._ssl = ssl
+        self.formatter = StdlibFormatter()
         self._ssl_verify = ssl_verify
         self._keyfile = keyfile
         self._certfile = certfile
         self._ca_certs = ca_certs
 
-
-
     def makePickle(self, record: LogRecord) -> bytes:
-        return Serializer.serialize(self._logstash_formatter.format(record), self._data_serialization)
+        return Serializer.serialize(self.formatter.format(record), self._data_serialization)
 
     def makeSocket(self, timeout=1):
         s = super(TCPLogstashHandler, self).makeSocket()

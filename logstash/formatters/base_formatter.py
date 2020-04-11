@@ -44,6 +44,33 @@ def get_process_info(record):
     return process_thread_fields
 
 
+def format_source(message_type, host, path):
+    return "%s://%s/%s" % (message_type, host, path)
+
+
+def format_timestamp(time):
+    tstamp = datetime.utcfromtimestamp(time)
+    return tstamp.strftime("%Y-%m-%dT%H:%M:%S") + ".%03d" % (tstamp.microsecond / 1000) + "Z"
+
+
+def format_exception(exc_info):
+    return ''.join(traceback.format_exception(*exc_info)) if exc_info else ''
+
+
+class LogstashFormatterBase(logging.Formatter):
+
+    def __init__(self, message_type='Logstash', tags=None, fqdn=False):
+        super().__init__()
+        self.message_type = message_type
+        self.tags = tags if tags is not None else []
+
+        if fqdn:
+            self.host = socket.getfqdn()
+        else:
+            self.host = socket.gethostname()
+
+
+
 class DefaultLogstashFormatter(logging.Formatter):
 
     def __init__(self, message_type='Logstash', tags=None, fqdn=False):
@@ -58,7 +85,7 @@ class DefaultLogstashFormatter(logging.Formatter):
     '''
     Instead of return string to be serialized, return the object 
     '''
-    def format(self, record: logging.LogRecord) -> dict:
+    def format(self, record: logging.LogRecord):
         record.message = record.getMessage()
         if self.usesTime():
             record.asctime = self.formatTime(record, self.datefmt)
@@ -76,4 +103,4 @@ class DefaultLogstashFormatter(logging.Formatter):
 
         record.__dict__.update(get_process_info(record))
 
-        return dict(record.__dict__)
+        return json.dumps(dict(record.__dict__))

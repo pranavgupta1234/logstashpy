@@ -7,6 +7,12 @@ supported_serializers = [
     'msgpack'
 ]
 
+def append_newline(data):
+    return data+"\n"
+
+def append_newline_byte(data):
+    return data+b'\n'
+
 def get_serializer(format):
     if format == 'pickle':
         return json_serializer
@@ -16,10 +22,18 @@ def get_serializer(format):
         raise ValueError(format)
 
 def json_serializer(data):
-    return bytes(json.dumps(data), 'utf-8')
+    if type(data) is bytes:
+        return append_newline_byte(data)
+
+    if type(data) is dict:
+        data = json.dumps(data)
+
+    return bytes(append_newline(data), 'utf-8')
 
 def msgpack_serializer(data):
-    return msgpack.packb(data)
+    record_dict = json.loads(data)
+    return msgpack.packb(record_dict)
+
 
 class Serializer():
     @classmethod
