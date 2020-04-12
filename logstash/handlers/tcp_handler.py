@@ -24,7 +24,7 @@ class TCPLogstashHandler(SocketHandler):
     '''
 
     def __init__(self, host, port=5959, serializer='pickle', message_type='logstash', tags=None,
-                 fqdn=False, ssl = False, ssl_verify=False, keyfile=None, certfile=None, ca_certs=None):
+                 fqdn=False, ssl = True, ssl_verify=False, keyfile=None, certfile=None, ca_certs=None):
         super(TCPLogstashHandler, self).__init__(host, port)
         self._host = host
         self._port = port

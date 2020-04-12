@@ -21,13 +21,11 @@ def get_serializer(format):
     else:
         raise ValueError(format)
 
+'''
+Received formatted string from formatter.format
+Appending newline is important for TCP input plugin of Logstash
+'''
 def json_serializer(data):
-    if type(data) is bytes:
-        return append_newline_byte(data)
-
-    if type(data) is dict:
-        data = json.dumps(data)
-
     return bytes(append_newline(data), 'utf-8')
 
 def msgpack_serializer(data):

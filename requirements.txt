@@ -1,0 +1,2 @@
+msgpack==1.0.0
+ecs-logging==0.1
