@@ -8,7 +8,7 @@ logstashpy : python logging handlers for logstash with SSL/TLS support
 [![image](https://img.shields.io/github/issues-pr/pranavgupta1234/logstashpy.svg)](https://github.com/pranavgupta1234/logstashpy/pulls)
 
 
-![image](./img/logstashpyb.png)
+![image](./img/logstashpy_noback.png)
 
 This repository is inspired from original project [python-logstash](https://github.com/vklochan/python-logstash) and lot of code and pending PR's are also 
 integrated here as well, some of them like SSL/TLS support. Moreover it is planned to support more serialization formats
