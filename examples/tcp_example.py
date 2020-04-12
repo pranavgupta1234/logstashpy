@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0,'../..')
 
 import logging
-from logstash.handlers.tcp_handler import TCPLogstashHandler
+from logstashpy.handlers.tcp_handler import TCPLogstashHandler
 
 # Local Logstash server
 host = 'localhost'
@@ -13,11 +13,11 @@ test_logger.setLevel(logging.INFO)
 handler = TCPLogstashHandler(host, 5959)
 test_logger.addHandler(handler)
 
-test_logger.error('test logstash error message.')
-test_logger.info('test logstash info message.')
-test_logger.warning('test logstash warning message.')
+test_logger.error('test logstashpy error message.')
+test_logger.info('test logstashpy info message.')
+test_logger.warning('test logstashpy warning message.')
 
-# add extra field to logstash message
+# add extra field to logstashpy message
 extra = {
     'test_string': 'cool!',
     'test_boolean': True,

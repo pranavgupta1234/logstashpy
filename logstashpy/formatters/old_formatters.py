@@ -1,10 +1,10 @@
-from logstash.formatters.base_formatter import LogstashFormatterBase
-from logstash.formatters.base_formatter import (get_extra_fields,
-                                                get_process_info,
-                                                get_debug_information)
-from logstash.formatters.base_formatter import (format_source,
-                                                format_timestamp,
-                                                format_exception)
+from logstashpy.formatters.base_formatter import LogstashFormatterBase
+from logstashpy.formatters.base_formatter import (get_extra_fields,
+                                                  get_process_info,
+                                                  get_debug_information)
+from logstashpy.formatters.base_formatter import (format_source,
+                                                  format_timestamp,
+                                                  format_exception)
 import json
 
 class LogstashFormatterVersion0(LogstashFormatterBase):

@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='logstashpy',
-    version='0.1',
+    version='0.0.1',
     author="Pranav Gupta",
     author_email="pranavgupta4321@gmail.com",
-    description="A convenient python client to send data to Logstash server",
+    description="python logging handlers to send data to Logstash server with SSL/TLS support",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pranavgupta1234/pielogstash",
+    url="https://github.com/pranavgupta1234/logstashpy",
     license="Apache Software License",
     packages=["logstashpy"],
     classifiers=[

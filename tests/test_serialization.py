@@ -1,13 +1,13 @@
 import unittest
 import os, sys
 
-sys.path.insert(0, os.path.join(os.getcwd(), "../logstash/"))
+sys.path.insert(0, os.path.join(os.getcwd(), "../logstashpy/"))
 
-from logstash.serialization import (json_serializer,
-                                    msgpack_serializer,
-                                    append_newline_byte,
-                                    append_newline
-                                    )
+from logstashpy.serialization import (json_serializer,
+                                      msgpack_serializer,
+                                      append_newline_byte,
+                                      append_newline
+                                      )
 import json
 
 class SerializationTests(unittest.TestCase):

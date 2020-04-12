@@ -1,8 +1,8 @@
 from logging import LogRecord, Formatter
 from logging.handlers import SocketHandler
-from logstash.serialization import Serializer
-from logstash.formatters.base_formatter import DefaultLogstashFormatter
-from logstash.formatters.ecs_formatter import ECSStdlibFormatter
+from logstashpy.serialization import Serializer
+from logstashpy.formatters.base_formatter import DefaultLogstashFormatter
+from logstashpy.formatters.ecs_formatter import ECSStdlibFormatter
 from ecs_logging import StdlibFormatter
 
 import logging
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class TCPLogstashHandler(SocketHandler):
     '''
     :param fqdn; Indicates whether to show fully qualified domain name or not (default False).
-    :param version: version of logstash event schema (default is 0).	    :param version: version of logstash event schema (default is 0).
+    :param version: version of logstashpy event schema (default is 0).	    :param version: version of logstashpy event schema (default is 0).
     :param tags: list of tags for a logger (default is None).	    :param tags: list of tags for a logger (default is None).
     :param ssl: Should SSL be enabled for the connection? Default is True.
     :param ssl_verify: Should the server's SSL certificate be verified?
@@ -23,7 +23,7 @@ class TCPLogstashHandler(SocketHandler):
     :param ca_certs: The path to the file containing recognised CA certificates. System wide CA certs are used if omitted.
     '''
 
-    def __init__(self, host, port=5959, serializer='pickle', message_type='logstash', tags=None,
+    def __init__(self, host, port=5959, serializer='pickle', message_type='logstashpy', tags=None,
                  fqdn=False, ssl = True, ssl_verify=False, keyfile=None, certfile=None, ca_certs=None):
         super(TCPLogstashHandler, self).__init__(host, port)
         self._host = host
