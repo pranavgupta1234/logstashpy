@@ -25,5 +25,5 @@ class SerializationTests(unittest.TestCase):
             'a' : 5,
             'b' : 6
         }
-        input_str_for_logstash = bytes(json.dumps(sample_json)) + b'\n'
+        input_str_for_logstash = bytes(json.dumps(sample_json), 'utf-8') + b'\n'
         self.assertEqual(json_serializer(json.dumps(sample_json)), input_str_for_logstash)
