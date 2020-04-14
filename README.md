@@ -26,7 +26,7 @@ Installation
 To install logstashpy, simply use all time favorite pip and type :
 
 ``` {.sourceCode .bash}
-$ pip install logstashpy✨
+$ pip install logstashpy
 ```
 
 Usage
